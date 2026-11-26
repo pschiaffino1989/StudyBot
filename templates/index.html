@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>StudyBot</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f3f5f7;
+            color: #243247;
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        form {
+            background: white;
+            padding: 24px;
+            border-radius: 12px;
+        }
+
+        label {
+            display: block;
+            margin-top: 16px;
+            margin-bottom: 6px;
+        }
+
+        select, button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            margin-top: 24px;
+            background: #2457a7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .resultado {
+            padding: 18px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .error {
+            color: #a12020;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>StudyBot</h1>
+    <p>
+        Indica las condiciones del lugar para predecir si es apto
+        para trabajar durante 30 minutos.
+    </p>
+
+    <form method="POST">
+        {% for columna in columnas %}
+            <label for="{{ columna }}">
+                {{ columna.replace("_", " ").capitalize() }}
+            </label>
+
+            <select id="{{ columna }}" name="{{ columna }}" required>
+                <option value="">Selecciona una opción</option>
+
+                <option value="1"
+                    {% if seleccion.get(columna) == "1" %}selected{% endif %}>
+                    Sí — 1
+                </option>
+
+                <option value="0"
+                    {% if seleccion.get(columna) == "0" %}selected{% endif %}>
+                    No — 0
+                </option>
+            </select>
+        {% endfor %}
+
+        <button type="submit">Evaluar lugar</button>
+    </form>
+
+    {% if error %}
+        <p class="error" role="alert">{{ error }}</p>
+    {% endif %}
+
+    {% if resultado %}
+        <h2 class="resultado" role="status">
+            Resultado: {{ resultado }}
+        </h2>
+    {% endif %}
+</body>
+</html>
